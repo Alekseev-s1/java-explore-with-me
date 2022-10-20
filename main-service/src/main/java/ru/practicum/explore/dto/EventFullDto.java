@@ -2,6 +2,7 @@ package ru.practicum.explore.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.practicum.explore.model.State;
 
 import java.time.LocalDateTime;
 
