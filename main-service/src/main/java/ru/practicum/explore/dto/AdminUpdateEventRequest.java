@@ -11,7 +11,7 @@ public class AdminUpdateEventRequest {
     private String annotation;
     private String eventDate;
     private Long category;
-    private Location location;
+    private LocationDto location;
     private Boolean paid = false;
     private Boolean requestModeration = true;
     private Integer participantLimit;

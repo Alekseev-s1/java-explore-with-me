@@ -1,5 +1,6 @@
 package ru.practicum.explore.controller.pub;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.dto.EventFullDto;
@@ -11,6 +12,7 @@ import ru.practicum.explore.service.EventService;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/events")
 public class PublicEventController {
@@ -31,6 +33,16 @@ public class PublicEventController {
                                          @RequestParam Sort sort,
                                          @RequestParam(defaultValue = "0") int from,
                                          @RequestParam(defaultValue = "10") int size) {
+        log.info("Get events by params: text {}," +
+                "categories {}," +
+                "paid {}," +
+                "rangeStart {}," +
+                "rangeEnd {}," +
+                "onlyAvailable {}," +
+                "sort {}," +
+                "from, {}" +
+                "size {}",
+                text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
         return eventService.getEvents(text,
                 categories,
                 paid,
@@ -45,6 +57,7 @@ public class PublicEventController {
 
     @GetMapping("/{eventId}")
     public EventFullDto getEvent(@PathVariable long eventId) {
+        log.info("Get event by eventId {}", eventId);
         return eventService.getEvent(eventId);
     }
 }

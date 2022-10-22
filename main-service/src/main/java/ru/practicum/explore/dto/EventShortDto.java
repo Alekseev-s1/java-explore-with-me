@@ -1,5 +1,6 @@
 package ru.practicum.explore.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 public class EventShortDto {
     private Long id;
     private String title;

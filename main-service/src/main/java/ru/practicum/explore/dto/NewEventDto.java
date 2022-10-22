@@ -30,7 +30,7 @@ public class NewEventDto {
     private Long category;
 
     @NotNull(message = "location can't be null")
-    private Location location;
+    private LocationDto location;
     private Boolean paid = false;
     private Boolean requestModeration = true;
     private Integer participantLimit;

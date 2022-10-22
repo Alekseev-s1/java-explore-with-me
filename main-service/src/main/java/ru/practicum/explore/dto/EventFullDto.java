@@ -1,5 +1,6 @@
 package ru.practicum.explore.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import ru.practicum.explore.model.State;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 public class EventFullDto {
     private Long id;
     private String title;
@@ -19,9 +21,9 @@ public class EventFullDto {
     private LocalDateTime eventDate;
     private LocalDateTime publishedOn;
     private UserShortDto initiator;
-    private Location location;
+    private LocationDto location;
     private Boolean paid;
-    private Integer participantLimit;
+    private Long participantLimit;
     private Boolean requestModeration;
     private State state;
     private Long views;

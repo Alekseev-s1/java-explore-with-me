@@ -1,5 +1,7 @@
 package ru.practicum.explore.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class CategoryDto {
     @NotNull(message = "id can't be null")
     private Long id;
