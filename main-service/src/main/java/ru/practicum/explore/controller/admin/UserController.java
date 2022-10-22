@@ -1,5 +1,6 @@
 package ru.practicum.explore.controller.admin;
 
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +26,9 @@ public class UserController {
                                   @RequestParam(defaultValue = "0") int from,
                                   @RequestParam(defaultValue = "10") int size) {
         log.info("Get users by params:" +
-                "ids {}," +
-                "from {}," +
-                "size {}",
+                        "ids {}," +
+                        "from {}," +
+                        "size {}",
                 ids, from, size);
         return userService.getUsers(ids, from, size);
     }

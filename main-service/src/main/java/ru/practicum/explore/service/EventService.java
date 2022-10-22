@@ -2,6 +2,7 @@ package ru.practicum.explore.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.EventFullDto;
 import ru.practicum.explore.dto.EventShortDto;
 import ru.practicum.explore.mapper.EventMapper;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import static ru.practicum.explore.exception.UnitNotFoundException.unitNotFoundException;
 
 @Service
+@Transactional(readOnly = true)
 public class EventService {
     private final CustomEventRepository customEventRepository;
     private final EventRepository eventRepository;

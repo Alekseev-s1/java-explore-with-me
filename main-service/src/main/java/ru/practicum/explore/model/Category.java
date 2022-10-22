@@ -1,7 +1,6 @@
 package ru.practicum.explore.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
