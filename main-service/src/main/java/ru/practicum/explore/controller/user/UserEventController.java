@@ -3,10 +3,7 @@ package ru.practicum.explore.controller.user;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.explore.dto.EventFullDto;
-import ru.practicum.explore.dto.EventShortDto;
-import ru.practicum.explore.dto.NewEventDto;
-import ru.practicum.explore.dto.UpdateEventRequest;
+import ru.practicum.explore.dto.*;
 import ru.practicum.explore.service.events.UserEventService;
 
 import java.util.List;
@@ -60,5 +57,28 @@ public class UserEventController {
                                     @PathVariable long eventId) {
         log.info("Canceling event by userId {}, eventId {}", userId, eventId);
         return eventService.cancelEvent(userId, eventId);
+    }
+
+    @GetMapping("/{eventId}/requests")
+    public List<ParticipationRequestDto> getEventRequests(@PathVariable long userId,
+                                                          @PathVariable long eventId) {
+        log.info("Get event requests by userId {}, eventId {}", userId, eventId);
+        return eventService.getParticipationRequests(userId, eventId);
+    }
+
+    @PatchMapping("/{eventId}/requests/{reqId}/confirm")
+    public ParticipationRequestDto confirmRequest(@PathVariable long userId,
+                                                  @PathVariable long eventId,
+                                                  @PathVariable long reqId) {
+        log.info("Confirming request by userId {}, eventId {}, reqId {}", userId, eventId, reqId);
+        return eventService.confirmRequest(userId, eventId, reqId);
+    }
+
+    @PatchMapping("/{eventId}/request/{reqId}/reject")
+    private ParticipationRequestDto rejectRequest(@PathVariable long userId,
+                                                  @PathVariable long eventId,
+                                                  @PathVariable long reqId) {
+        log.info("Rejecting request by userId {}, eventId {}, reqId {}", userId, eventId, reqId);
+        return eventService.rejectRequest(userId, eventId, reqId);
     }
 }
