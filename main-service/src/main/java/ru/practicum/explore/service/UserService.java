@@ -25,11 +25,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserDto createUser(NewUserRequest newUserRequest) {
-        User user = UserMapper.toUser(newUserRequest);
-        return UserMapper.toUserDto(userRepository.save(user));
-    }
-
     public List<UserDto> getUsers(List<Long> ids, int from, int size) {
         List<User> users;
 
@@ -42,6 +37,12 @@ public class UserService {
         return users.stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public UserDto createUser(NewUserRequest newUserRequest) {
+        User user = UserMapper.toUser(newUserRequest);
+        return UserMapper.toUserDto(userRepository.save(user));
     }
 
     @Transactional

@@ -22,9 +22,9 @@ public class PublicCategoryController {
     @GetMapping
     public List<CategoryDto> getCategories(@RequestParam(defaultValue = "0") int from,
                                            @RequestParam(defaultValue = "10") int size) {
-        log.info("Get categories by params:" +
-                        "from {}," +
-                        "size {}",
+        log.info("Get categories by params: " +
+                        "from {}, " +
+                        "size {} ",
                 from, size);
         return categoryService.getCategories(from, size);
     }

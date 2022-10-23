@@ -25,10 +25,10 @@ public class UserController {
     public List<UserDto> getUsers(@RequestParam List<Long> ids,
                                   @RequestParam(defaultValue = "0") int from,
                                   @RequestParam(defaultValue = "10") int size) {
-        log.info("Get users by params:" +
-                        "ids {}," +
-                        "from {}," +
-                        "size {}",
+        log.info("Get users by params: " +
+                        "ids {}, " +
+                        "from {}, " +
+                        "size {} ",
                 ids, from, size);
         return userService.getUsers(ids, from, size);
     }

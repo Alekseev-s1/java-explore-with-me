@@ -1,7 +1,13 @@
 package ru.practicum.explore.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -10,6 +16,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString
 public class NewEventDto {
     @NotBlank(message = "title can't be null or blank")
     @Size(min = 3, max = 120, message = "title should be from 3 to 120 letters")
@@ -24,6 +31,8 @@ public class NewEventDto {
     private String annotation;
 
     @NotNull(message = "eventDate can't be null")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime eventDate;
 
     @NotNull(message = "category can't be null")
@@ -31,7 +40,7 @@ public class NewEventDto {
 
     @NotNull(message = "location can't be null")
     private LocationDto location;
-    private Boolean paid = false;
-    private Boolean requestModeration = true;
-    private Integer participantLimit;
+    private boolean paid = false;
+    private boolean requestModeration = true;
+    private long participantLimit;
 }

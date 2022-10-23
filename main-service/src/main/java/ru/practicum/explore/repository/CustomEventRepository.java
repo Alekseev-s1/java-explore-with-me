@@ -7,7 +7,10 @@ import ru.practicum.explore.model.Sort;
 import ru.practicum.explore.model.State;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,19 +24,20 @@ public class CustomEventRepository {
         this.entityManager = entityManager;
     }
 
-    public List<Event> findAll(String text,
-                               List<Long> categories,
-                               Boolean paid,
-                               LocalDateTime rangeStart,
-                               LocalDateTime rangeEnd,
-                               Sort sort,
-                               State state,
-                               int from,
-                               int size) {
+    public List<Event> findAllPublicEvents(String text,
+                                           List<Long> categoryIds,
+                                           Boolean paid,
+                                           LocalDateTime rangeStart,
+                                           LocalDateTime rangeEnd,
+                                           Sort sort,
+                                           int from,
+                                           int size) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Event> query = cb.createQuery(Event.class);
         Root<Event> event = query.from(Event.class);
         List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(cb.equal(event.get("state"), "PUBLIC"));
 
         if (text != null) {
             predicates.add(cb.or(
@@ -42,8 +46,8 @@ public class CustomEventRepository {
             ));
         }
 
-        if (categories != null && !categories.isEmpty()) {
-            predicates.add(cb.in(event.get("category").get("id")).value(categories));
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            predicates.add(cb.in(event.get("category").get("id")).value(categoryIds));
         }
 
         if (paid != null) {
@@ -61,13 +65,50 @@ public class CustomEventRepository {
             predicates.add(cb.lessThan(event.get("eventDate"), rangeEnd));
         }
 
-        if (state != null) {
-            predicates.add(cb.equal(event.get("state"), state));
-        }
-
         return entityManager
                 .createQuery(query.select(event).where(cb.and(predicates.toArray(Predicate[]::new)))
                         .orderBy(cb.desc(event.get(sort.toString().toLowerCase()))))
+                .setFirstResult(from)
+                .setMaxResults(size)
+                .getResultList();
+    }
+
+    public List<Event> findAllAdminEvents(List<Long> userIds,
+                                          List<State> states,
+                                          List<Long> categories,
+                                          LocalDateTime rangeStart,
+                                          LocalDateTime rangeEnd,
+                                          int from,
+                                          int size) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Event> query = cb.createQuery(Event.class);
+        Root<Event> event = query.from(Event.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (userIds != null && !userIds.isEmpty()) {
+            predicates.add(cb.in(event.get("initiator").get("id")).value(userIds));
+        }
+
+        if (states != null && !states.isEmpty()) {
+            predicates.add(cb.in(event.get("state")).value(states));
+        }
+
+        if (categories != null && !categories.isEmpty()) {
+            predicates.add(cb.in(event.get("category").get("id")).value(categories));
+        }
+
+        if (rangeStart != null) {
+            predicates.add(cb.greaterThan(event.get("eventDate"), rangeEnd));
+        } else {
+            LocalDateTime now = LocalDateTime.now();
+            predicates.add(cb.greaterThan(event.get("eventDate"), now));
+        }
+
+        if (rangeEnd != null) {
+            predicates.add(cb.lessThan(event.get("eventDate"), rangeEnd));
+        }
+
+        return entityManager.createQuery(query.select(event).where(cb.and(predicates.toArray(Predicate[]::new))))
                 .setFirstResult(from)
                 .setMaxResults(size)
                 .getResultList();

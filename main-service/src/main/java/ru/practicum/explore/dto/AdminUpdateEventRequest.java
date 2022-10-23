@@ -1,18 +1,30 @@
 package ru.practicum.explore.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString
 public class AdminUpdateEventRequest {
     private String title;
     private String description;
     private String annotation;
-    private String eventDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime eventDate;
     private Long category;
     private LocationDto location;
-    private Boolean paid = false;
-    private Boolean requestModeration = true;
-    private Integer participantLimit;
+    private boolean paid = false;
+    private boolean requestModeration = true;
+    private long participantLimit;
 }

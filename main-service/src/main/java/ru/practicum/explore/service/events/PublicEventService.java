@@ -1,4 +1,4 @@
-package ru.practicum.explore.service;
+package ru.practicum.explore.service.events;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,15 +20,21 @@ import static ru.practicum.explore.exception.UnitNotFoundException.unitNotFoundE
 
 @Service
 @Transactional(readOnly = true)
-public class EventService {
-    private final CustomEventRepository customEventRepository;
+public class PublicEventService {
     private final EventRepository eventRepository;
+    private final CustomEventRepository customEventRepository;
 
     @Autowired
-    public EventService(CustomEventRepository customEventRepository,
-                        EventRepository eventRepository) {
-        this.customEventRepository = customEventRepository;
+    public PublicEventService(EventRepository eventRepository, CustomEventRepository customEventRepository) {
         this.eventRepository = eventRepository;
+        this.customEventRepository = customEventRepository;
+    }
+
+    public EventFullDto getEvent(long eventId) {
+        return EventMapper.toEventFullDto(
+                eventRepository.findEventByIdAndState(eventId, State.PUBLISHED)
+                        .orElseThrow(unitNotFoundException("Событие с id = {} не найдено", eventId))
+        );
     }
 
     public List<EventShortDto> getEvents(String text,
@@ -38,10 +44,9 @@ public class EventService {
                                          LocalDateTime rangeEnd,
                                          boolean onlyAvailable,
                                          Sort sort,
-                                         State state,
                                          int from,
                                          int size) {
-        List<Event> events = customEventRepository.findAll(text, categories, paid, rangeStart, rangeEnd, sort, state, from, size);
+        List<Event> events = customEventRepository.findAllPublicEvents(text, categories, paid, rangeStart, rangeEnd, sort, from, size);
 
         if (onlyAvailable) {
             return events.stream()
@@ -55,9 +60,5 @@ public class EventService {
         }
     }
 
-    public EventFullDto getEvent(long eventId) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(unitNotFoundException("Событие с id = {} не найдено", eventId));
-        return EventMapper.toEventFullDto(event);
-    }
+
 }

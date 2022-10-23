@@ -24,5 +24,5 @@ public class Request {
     @JoinColumn(name = "requester_id", referencedColumnName = "user_id")
     private User requester;
     private Status status;
-    private LocalDateTime created;
+    private LocalDateTime created = LocalDateTime.now();
 }

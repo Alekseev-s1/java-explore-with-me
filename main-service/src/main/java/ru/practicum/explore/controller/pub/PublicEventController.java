@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.dto.EventFullDto;
 import ru.practicum.explore.dto.EventShortDto;
 import ru.practicum.explore.model.Sort;
-import ru.practicum.explore.model.State;
-import ru.practicum.explore.service.EventService;
+import ru.practicum.explore.service.events.PublicEventService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,10 +15,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/events")
 public class PublicEventController {
-    private final EventService eventService;
+    private final PublicEventService eventService;
 
     @Autowired
-    public PublicEventController(EventService eventService) {
+    public PublicEventController(PublicEventService eventService) {
         this.eventService = eventService;
     }
 
@@ -33,15 +32,16 @@ public class PublicEventController {
                                          @RequestParam Sort sort,
                                          @RequestParam(defaultValue = "0") int from,
                                          @RequestParam(defaultValue = "10") int size) {
-        log.info("Get events by params: text {}," +
-                "categories {}," +
-                "paid {}," +
-                "rangeStart {}," +
-                "rangeEnd {}," +
-                "onlyAvailable {}," +
-                "sort {}," +
-                "from, {}" +
-                "size {}",
+        log.info("Get events by params: " +
+                        "text {}, " +
+                        "categories {}, " +
+                        "paid {}, " +
+                        "rangeStart {}, " +
+                        "rangeEnd {}, " +
+                        "onlyAvailable {}, " +
+                        "sort {}, " +
+                        "from, {} " +
+                        "size {}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
         return eventService.getEvents(text,
                 categories,
@@ -50,7 +50,6 @@ public class PublicEventController {
                 rangeEnd,
                 onlyAvailable,
                 sort,
-                State.PUBLISHED,
                 from,
                 size);
     }
