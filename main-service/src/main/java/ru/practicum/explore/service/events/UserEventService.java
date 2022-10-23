@@ -43,12 +43,10 @@ public class UserEventService {
     }
 
     public EventFullDto getEvent(long userId, long eventId) {
-        checkUserExists(userId);
         return EventMapper.toEventFullDto(getEventByEventAndUserIds(userId, eventId));
     }
 
     public List<EventShortDto> getEvents(long userId, int from, int size) {
-        checkUserExists(userId);
         return eventRepository.findEventsByInitiatorId(userId, PageRequest.of(from / size, size))
                 .stream()
                 .map(EventMapper::toEventShortDto)
@@ -172,11 +170,6 @@ public class UserEventService {
         }
     }
 
-    private Event getEventById(long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(unitNotFoundException("Событие с id = {} не найдено", eventId));
-    }
-
     private Category getCategoryById(long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(unitNotFoundException("Категория с id = {} не найдена", categoryId));
@@ -197,9 +190,5 @@ public class UserEventService {
     private Request getRequestById(long reqId) {
         return requestRepository.findById(reqId)
                 .orElseThrow(unitNotFoundException("Заявка с id = {} не найдена", reqId));
-    }
-
-    private void checkUserExists(long userId) {
-        getUserById(userId);
     }
 }
