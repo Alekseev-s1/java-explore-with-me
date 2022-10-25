@@ -48,7 +48,7 @@ public class UserService {
     @Transactional
     public void deleteUser(long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(unitNotFoundException("Пользователь с id = {} не найден", userId));
+                .orElseThrow(unitNotFoundException("Пользователь с id = {0} не найден", userId));
         userRepository.delete(user);
     }
 }

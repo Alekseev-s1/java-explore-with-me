@@ -37,7 +37,7 @@ public class CustomEventRepository {
         Root<Event> event = query.from(Event.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        predicates.add(cb.equal(event.get("state"), "PUBLIC"));
+        predicates.add(cb.equal(event.get("state"), State.PUBLISHED));
 
         if (text != null) {
             predicates.add(cb.or(
@@ -55,7 +55,7 @@ public class CustomEventRepository {
         }
 
         if (rangeStart != null) {
-            predicates.add(cb.greaterThan(event.get("eventDate"), rangeEnd));
+            predicates.add(cb.greaterThan(event.get("eventDate"), rangeStart));
         } else {
             LocalDateTime now = LocalDateTime.now();
             predicates.add(cb.greaterThan(event.get("eventDate"), now));
@@ -67,7 +67,7 @@ public class CustomEventRepository {
 
         return entityManager
                 .createQuery(query.select(event).where(cb.and(predicates.toArray(Predicate[]::new)))
-                        .orderBy(cb.desc(event.get(sort.toString().toLowerCase()))))
+                        .orderBy(cb.desc(event.get(sort.equals(Sort.EVENT_DATE) ? "eventDate" : "views"))))
                 .setFirstResult(from)
                 .setMaxResults(size)
                 .getResultList();
@@ -98,7 +98,7 @@ public class CustomEventRepository {
         }
 
         if (rangeStart != null) {
-            predicates.add(cb.greaterThan(event.get("eventDate"), rangeEnd));
+            predicates.add(cb.greaterThan(event.get("eventDate"), rangeStart));
         } else {
             LocalDateTime now = LocalDateTime.now();
             predicates.add(cb.greaterThan(event.get("eventDate"), now));

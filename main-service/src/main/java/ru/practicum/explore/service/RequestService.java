@@ -65,7 +65,7 @@ public class RequestService {
         request.setRequester(user);
 
         if (!event.isRequestModeration()) {
-            request.setStatus(Status.ACCEPTED);
+            request.setStatus(Status.CONFIRMED);
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
         } else {
             request.setStatus(Status.PENDING);
@@ -77,20 +77,20 @@ public class RequestService {
     @Transactional
     public ParticipationRequestDto cancelRequest(long userId, long reqId) {
         Request request = requestRepository.findRequestByIdAndRequesterId(reqId, userId)
-                .orElseThrow(unitNotFoundException("Заявка с id={}, принадлежащая пользователю с id={}, не найдена",
+                .orElseThrow(unitNotFoundException("Заявка с id={0}, принадлежащая пользователю с id={1}, не найдена",
                         reqId,
                         userId));
-        request.setStatus(Status.REJECTED);
+        request.setStatus(Status.CANCELED);
         return RequestMapper.toParticipationRequestDto(request);
     }
 
     private User getUserById(long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(unitNotFoundException("Пользователь с id={} не найден", userId));
+                .orElseThrow(unitNotFoundException("Пользователь с id={0} не найден", userId));
     }
 
     public Event getEventById(long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(unitNotFoundException("Событие с id={} не найдено", eventId));
+                .orElseThrow(unitNotFoundException("Событие с id={0} не найдено", eventId));
     }
 }

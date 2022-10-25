@@ -8,6 +8,7 @@ import ru.practicum.explore.dto.EventFullDto;
 import ru.practicum.explore.exception.WrongDateException;
 import ru.practicum.explore.exception.WrongStateException;
 import ru.practicum.explore.mapper.EventMapper;
+import ru.practicum.explore.mapper.LocationMapper;
 import ru.practicum.explore.model.Category;
 import ru.practicum.explore.model.Event;
 import ru.practicum.explore.model.Location;
@@ -18,6 +19,8 @@ import ru.practicum.explore.repository.EventRepository;
 import ru.practicum.explore.repository.LocationRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,11 +49,14 @@ public class AdminEventService {
     public List<EventFullDto> getEvents(List<Long> userIds,
                                         List<State> states,
                                         List<Long> categories,
-                                        LocalDateTime rangeStart,
-                                        LocalDateTime rangeEnd,
+                                        String rangeStart,
+                                        String rangeEnd,
                                         int from,
                                         int size) {
-        return customEventRepository.findAllAdminEvents(userIds, states, categories, rangeStart, rangeEnd, from, size)
+        LocalDateTime start = toLocalDateTime(rangeStart);
+        LocalDateTime end = toLocalDateTime(rangeEnd);
+
+        return customEventRepository.findAllAdminEvents(userIds, states, categories, start, end, from, size)
                 .stream()
                 .map(EventMapper::toEventFullDto)
                 .collect(Collectors.toList());
@@ -59,10 +65,38 @@ public class AdminEventService {
     @Transactional
     public EventFullDto updateEvent(long eventId, AdminUpdateEventRequest adminUpdateEventRequest) {
         Event eventToUpdate = getEventById(eventId);
-        Event newEvent = EventMapper.toEvent(adminUpdateEventRequest, getCategoryById(adminUpdateEventRequest.getCategory()));
+        Category category;
+
+        if (adminUpdateEventRequest.getCategory() != null) {
+            category = getCategoryById(adminUpdateEventRequest.getCategory());
+        } else {
+            category = null;
+        }
+
+        Event newEvent = EventMapper.toEvent(adminUpdateEventRequest, category);
         newEvent.setId(eventToUpdate.getId());
         saveLocation(newEvent.getLocation());
         return EventMapper.toEventFullDto(eventRepository.save(newEvent));
+        /*if (adminUpdateEventRequest.getTitle() != null) {
+            eventToUpdate.setTitle(adminUpdateEventRequest.getTitle());
+        }
+        if (adminUpdateEventRequest.getDescription() != null) {
+            eventToUpdate.setDescription(adminUpdateEventRequest.getDescription());
+        }
+        if (adminUpdateEventRequest.getAnnotation() != null) {
+            eventToUpdate.setAnnotation(adminUpdateEventRequest.getAnnotation());
+        }
+        if (adminUpdateEventRequest.getCategory() != null) {
+            eventToUpdate.setCategory(getCategoryById(adminUpdateEventRequest.getCategory()));
+        }
+        if (adminUpdateEventRequest.getLocation() != null) {
+            eventToUpdate.setLocation(LocationMapper.toLocation(adminUpdateEventRequest.getLocation()));
+        }
+        if (adminUpdateEventRequest.getEventDate() != null) {
+            eventToUpdate.setEventDate(adminUpdateEventRequest.getEventDate());
+        }
+        eventToUpdate.setParticipantLimit(adminUpdateEventRequest.getParticipantLimit());
+        return EventMapper.toEventFullDto(eventToUpdate);*/
     }
 
     @Transactional
@@ -96,21 +130,30 @@ public class AdminEventService {
         return EventMapper.toEventFullDto(event);
     }
 
-    private Event getEventById(long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(unitNotFoundException("Событие с id = {} не найдено", eventId));
-    }
-
-    private Category getCategoryById(long categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(unitNotFoundException("Категория с id = {} не найдена", categoryId));
-    }
-
     @Transactional
     public void saveLocation(Location location) {
+        if (location == null) {
+            return;
+        }
+
         Optional<Location> locationalOpt = locationRepository.findLocationByLatAndLon(location.getLat(), location.getLon());
         if (locationalOpt.isEmpty()) {
             locationRepository.save(location);
         }
+    }
+
+    private Event getEventById(long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(unitNotFoundException("Событие с id = {0} не найдено", eventId));
+    }
+
+    private Category getCategoryById(long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(unitNotFoundException("Категория с id = {0} не найдена", categoryId));
+    }
+
+    private LocalDateTime toLocalDateTime(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(date, formatter);
     }
 }

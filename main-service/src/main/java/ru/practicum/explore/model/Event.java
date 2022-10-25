@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 @Setter
@@ -20,6 +19,8 @@ public class Event {
     private String title;
     private String annotation;
     private String description;
+
+    @Enumerated(EnumType.STRING)
     private State state;
 
     @ManyToOne
@@ -41,7 +42,7 @@ public class Event {
     private boolean paid;
 
     @Column(name = "request_moderation")
-    private boolean requestModeration = true;
+    private boolean requestModeration;
 
     @Column(name = "confirmedRequests")
     private long confirmedRequests;

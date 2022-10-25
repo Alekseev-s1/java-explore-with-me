@@ -8,6 +8,7 @@ import ru.practicum.explore.dto.NewUserRequest;
 import ru.practicum.explore.dto.UserDto;
 import ru.practicum.explore.service.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping
-    private UserDto createUser(@RequestBody NewUserRequest newUserRequest) {
+    private UserDto createUser(@RequestBody @Valid NewUserRequest newUserRequest) {
         log.info("Creating new user {}", newUserRequest);
         return userService.createUser(newUserRequest);
     }

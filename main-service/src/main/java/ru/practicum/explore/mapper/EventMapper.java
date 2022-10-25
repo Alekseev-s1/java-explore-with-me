@@ -28,13 +28,13 @@ public class EventMapper {
                 .title(event.getTitle())
                 .description(event.getDescription())
                 .annotation(event.getAnnotation())
-                .category(CategoryMapper.toCategoryDto(event.getCategory()))
+                .category(event.getCategory() != null ? CategoryMapper.toCategoryDto(event.getCategory()) : null)
                 .confirmedRequests(event.getConfirmedRequests())
                 .createdOn(event.getCreatedOn())
                 .eventDate(event.getEventDate())
                 .publishedOn(event.getPublishedOn())
-                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
-                .location(LocationMapper.toLocationDto(event.getLocation()))
+                .initiator(event.getInitiator() != null ? UserMapper.toUserShortDto(event.getInitiator()) : null)
+                .location(event.getLocation() != null ? LocationMapper.toLocationDto(event.getLocation()) : null)
                 .paid(event.isPaid())
                 .participantLimit(event.getParticipantLimit())
                 .requestModeration(event.isRequestModeration())
@@ -51,10 +51,16 @@ public class EventMapper {
         event.setDescription(adminUpdateEventRequest.getDescription());
         event.setEventDate(adminUpdateEventRequest.getEventDate());
         event.setCategory(category);
-        event.setLocation(LocationMapper.toLocation(adminUpdateEventRequest.getLocation()));
         event.setPaid(adminUpdateEventRequest.isPaid());
         event.setRequestModeration(adminUpdateEventRequest.isRequestModeration());
         event.setParticipantLimit(adminUpdateEventRequest.getParticipantLimit());
+
+        if (adminUpdateEventRequest.getLocation() != null) {
+            event.setLocation(LocationMapper.toLocation(adminUpdateEventRequest.getLocation()));
+        } else {
+            event.setLocation(null);
+        }
+
         return event;
     }
 

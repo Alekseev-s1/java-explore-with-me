@@ -70,6 +70,6 @@ public class CategoryService {
 
     private Category getCategoryById(long categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(unitNotFoundException("Категория с categoryId = {} не найдена", categoryId));
+                .orElseThrow(unitNotFoundException("Категория с categoryId = {0} не найдена", categoryId));
     }
 }

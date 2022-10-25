@@ -1,5 +1,8 @@
 package ru.practicum.explore.controller.admin;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +29,8 @@ public class AdminEventController {
     public List<EventFullDto> getEvents(@RequestParam List<Long> users,
                                         @RequestParam List<State> states,
                                         @RequestParam List<Long> categories,
-                                        @RequestParam LocalDateTime rangeStart,
-                                        @RequestParam LocalDateTime rangeEnd,
+                                        @RequestParam String rangeStart,
+                                        @RequestParam String rangeEnd,
                                         @RequestParam(defaultValue = "0") int from,
                                         @RequestParam(defaultValue = "10") int size) {
         log.info("Get event by params: " +

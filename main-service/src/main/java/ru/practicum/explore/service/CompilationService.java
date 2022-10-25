@@ -50,8 +50,9 @@ public class CompilationService {
 
     @Transactional
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
-        Compilation compilation = CompilationMapper
-                .toCompilation(newCompilationDto, getEvents(newCompilationDto.getEvents()));
+        List<Event> events = getEvents(newCompilationDto.getEvents());
+        Compilation compilation = CompilationMapper.toCompilation(newCompilationDto, events);
+        events.forEach(event -> event.getCompilations().add(compilation));
         return CompilationMapper.toCompilationDto(compilationRepository.save(compilation));
     }
 
@@ -59,6 +60,7 @@ public class CompilationService {
     public void addEventToCompilation(long compId, long eventId) {
         Compilation compilation = getCompilationById(compId);
         Event event = getEvent(eventId);
+        event.getCompilations().add(compilation);
         compilation.getEvents().add(event);
     }
 
@@ -84,17 +86,18 @@ public class CompilationService {
     public void deleteEventFromCompilation(long compId, long eventId) {
         Compilation compilation = getCompilationById(compId);
         Event event = getEvent(eventId);
+        event.getCompilations().remove(compilation);
         compilation.getEvents().remove(event);
     }
 
     private Compilation getCompilationById(long compId) {
         return compilationRepository.findById(compId)
-                .orElseThrow(unitNotFoundException("Подборка с id={} не найдена", compId));
+                .orElseThrow(unitNotFoundException("Подборка с id={0} не найдена", compId));
     }
 
     private Event getEvent(long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(unitNotFoundException("Событие с id={} не найдено", eventId));
+                .orElseThrow(unitNotFoundException("Событие с id={0} не найдено", eventId));
     }
 
     private List<Event> getEvents(List<Long> ids) {

@@ -70,6 +70,7 @@ public class UserEventService {
 
         User user = getUserById(userId);
         event.setInitiator(user);
+        event.setState(State.PENDING);
         saveLocation(event.getLocation());
         return EventMapper.toEventFullDto(eventRepository.save(event));
     }
@@ -145,10 +146,13 @@ public class UserEventService {
             throw new RequestsLimitException("Нельзя подтвердить заявку. Лимит подтвержденных заявок уже исчерпан");
         }
         if (event.getParticipantLimit() == (event.getConfirmedRequests() + 1)) {
-            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-            request.setStatus(Status.ACCEPTED);
             List<Request> pendingRequests = requestRepository.findRequestsByEventAndStatus(event, Status.PENDING);
-            pendingRequests.forEach(req -> req.setStatus(Status.REJECTED));
+            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+            request.setStatus(Status.CONFIRMED);
+            pendingRequests.forEach(req -> req.setStatus(Status.CANCELED));
+        } else {
+            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+            request.setStatus(Status.CONFIRMED);
         }
 
         return RequestMapper.toParticipationRequestDto(request);
@@ -172,23 +176,23 @@ public class UserEventService {
 
     private Category getCategoryById(long categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(unitNotFoundException("Категория с id = {} не найдена", categoryId));
+                .orElseThrow(unitNotFoundException("Категория с id = {0} не найдена", categoryId));
     }
 
     private User getUserById(long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(unitNotFoundException("Пользователь с id = {} не найден", userId));
+                .orElseThrow(unitNotFoundException("Пользователь с id = {0} не найден", userId));
     }
 
     private Event getEventByEventAndUserIds(long userId, long eventId) {
         return eventRepository.findEventByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(unitNotFoundException("Событие с id = {}, принадлежащее пользователю с id = {} не найдено",
+                .orElseThrow(unitNotFoundException("Событие с id = {0}, принадлежащее пользователю с id = {1} не найдено",
                         eventId,
                         userId));
     }
 
     private Request getRequestById(long reqId) {
         return requestRepository.findById(reqId)
-                .orElseThrow(unitNotFoundException("Заявка с id = {} не найдена", reqId));
+                .orElseThrow(unitNotFoundException("Заявка с id = {0} не найдена", reqId));
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.dto.*;
 import ru.practicum.explore.service.events.UserEventService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -40,14 +41,14 @@ public class UserEventController {
 
     @PostMapping
     public EventFullDto createEvent(@PathVariable long userId,
-                                    @RequestBody NewEventDto newEventDto) {
+                                    @RequestBody @Valid NewEventDto newEventDto) {
         log.info("Creating event by userId {}, event {}", userId, newEventDto);
         return eventService.createEvent(userId, newEventDto);
     }
 
     @PatchMapping
     public EventFullDto updateEvent(@PathVariable long userId,
-                                    @RequestBody UpdateEventRequest updateEventRequest) {
+                                    @RequestBody @Valid UpdateEventRequest updateEventRequest) {
         log.info("Updating event by userId {}, updateEvent {}", userId, updateEventRequest);
         return eventService.updateEvent(userId, updateEventRequest);
     }
@@ -74,7 +75,7 @@ public class UserEventController {
         return eventService.confirmRequest(userId, eventId, reqId);
     }
 
-    @PatchMapping("/{eventId}/request/{reqId}/reject")
+    @PatchMapping("/{eventId}/requests/{reqId}/reject")
     private ParticipationRequestDto rejectRequest(@PathVariable long userId,
                                                   @PathVariable long eventId,
                                                   @PathVariable long reqId) {

@@ -13,6 +13,7 @@ import ru.practicum.explore.repository.CustomEventRepository;
 import ru.practicum.explore.repository.EventRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,20 +34,22 @@ public class PublicEventService {
     public EventFullDto getEvent(long eventId) {
         return EventMapper.toEventFullDto(
                 eventRepository.findEventByIdAndState(eventId, State.PUBLISHED)
-                        .orElseThrow(unitNotFoundException("Событие с id = {} не найдено", eventId))
+                        .orElseThrow(unitNotFoundException("Событие с id = {0} не найдено", eventId))
         );
     }
 
     public List<EventShortDto> getEvents(String text,
                                          List<Long> categories,
                                          Boolean paid,
-                                         LocalDateTime rangeStart,
-                                         LocalDateTime rangeEnd,
+                                         String rangeStart,
+                                         String rangeEnd,
                                          boolean onlyAvailable,
                                          Sort sort,
                                          int from,
                                          int size) {
-        List<Event> events = customEventRepository.findAllPublicEvents(text, categories, paid, rangeStart, rangeEnd, sort, from, size);
+        LocalDateTime start = toLocalDateTime(rangeStart);
+        LocalDateTime end = toLocalDateTime(rangeEnd);
+        List<Event> events = customEventRepository.findAllPublicEvents(text, categories, paid, start, end, sort, from, size);
 
         if (onlyAvailable) {
             return events.stream()
@@ -60,5 +63,8 @@ public class PublicEventService {
         }
     }
 
-
+    private LocalDateTime toLocalDateTime(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(date, formatter);
+    }
 }
