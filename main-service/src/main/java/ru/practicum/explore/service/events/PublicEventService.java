@@ -32,10 +32,10 @@ public class PublicEventService {
     }
 
     public EventFullDto getEvent(long eventId) {
-        return EventMapper.toEventFullDto(
-                eventRepository.findEventByIdAndState(eventId, State.PUBLISHED)
-                        .orElseThrow(unitNotFoundException("Событие с id = {0} не найдено", eventId))
-        );
+        Event event = eventRepository.findEventByIdAndState(eventId, State.PUBLISHED)
+                        .orElseThrow(unitNotFoundException("Событие с id = {0} не найдено", eventId));
+        event.setViews(event.getViews() + 1);
+        return EventMapper.toEventFullDto(event);
     }
 
     public List<EventShortDto> getEvents(String text,

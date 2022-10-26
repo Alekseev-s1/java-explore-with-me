@@ -64,11 +64,14 @@ public class RequestService {
         request.setEvent(event);
         request.setRequester(user);
 
-        if (!event.isRequestModeration()) {
+        if (!event.isRequestModeration() || event.getParticipantLimit() == 0) {
             request.setStatus(Status.CONFIRMED);
-            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
         } else {
             request.setStatus(Status.PENDING);
+        }
+        
+        if (event.getParticipantLimit() != 0) {
+            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
         }
 
         return RequestMapper.toParticipationRequestDto(requestRepository.save(request));
