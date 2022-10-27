@@ -3,11 +3,14 @@ package ru.practicum.explore.controller.pub;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.explore.dto.EndpointHit;
 import ru.practicum.explore.dto.EventFullDto;
 import ru.practicum.explore.dto.EventShortDto;
+import ru.practicum.explore.model.Constant;
 import ru.practicum.explore.model.Sort;
 import ru.practicum.explore.service.events.PublicEventService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,7 +34,8 @@ public class PublicEventController {
                                          @RequestParam(defaultValue = "false") boolean onlyAvailable,
                                          @RequestParam Sort sort,
                                          @RequestParam(defaultValue = "0") int from,
-                                         @RequestParam(defaultValue = "10") int size) {
+                                         @RequestParam(defaultValue = "10") int size,
+                                         HttpServletRequest request) {
         log.info("Get events by params: " +
                         "text {}, " +
                         "categories {}, " +
@@ -43,6 +47,7 @@ public class PublicEventController {
                         "from, {} " +
                         "size {}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+        EndpointHit endpointHit = new EndpointHit(Constant.APP_NAME, request.getRequestURI(), request.getRemoteAddr());
         return eventService.getEvents(text,
                 categories,
                 paid,
@@ -51,12 +56,14 @@ public class PublicEventController {
                 onlyAvailable,
                 sort,
                 from,
-                size);
+                size,
+                endpointHit);
     }
 
     @GetMapping("/{eventId}")
-    public EventFullDto getEvent(@PathVariable long eventId) {
+    public EventFullDto getEvent(@PathVariable long eventId, HttpServletRequest request) {
         log.info("Get event by eventId {}", eventId);
-        return eventService.getEvent(eventId);
+        EndpointHit endpointHit = new EndpointHit(Constant.APP_NAME, request.getRequestURI(), request.getRemoteAddr());
+        return eventService.getEvent(eventId, endpointHit);
     }
 }

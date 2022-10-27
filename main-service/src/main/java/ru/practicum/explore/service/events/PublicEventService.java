@@ -3,6 +3,7 @@ package ru.practicum.explore.service.events;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.explore.dto.EndpointHit;
 import ru.practicum.explore.dto.EventFullDto;
 import ru.practicum.explore.dto.EventShortDto;
 import ru.practicum.explore.mapper.EventMapper;
@@ -24,14 +25,20 @@ import static ru.practicum.explore.exception.UnitNotFoundException.unitNotFoundE
 public class PublicEventService {
     private final EventRepository eventRepository;
     private final CustomEventRepository customEventRepository;
+    private final EventStatClient eventStatClient;
 
     @Autowired
-    public PublicEventService(EventRepository eventRepository, CustomEventRepository customEventRepository) {
+    public PublicEventService(EventRepository eventRepository,
+                              CustomEventRepository customEventRepository,
+                              EventStatClient eventStatClient) {
         this.eventRepository = eventRepository;
         this.customEventRepository = customEventRepository;
+        this.eventStatClient = eventStatClient;
     }
 
-    public EventFullDto getEvent(long eventId) {
+    public EventFullDto getEvent(long eventId, EndpointHit endpointHit) {
+        eventStatClient.sendHit(endpointHit);
+
         Event event = eventRepository.findEventByIdAndState(eventId, State.PUBLISHED)
                         .orElseThrow(unitNotFoundException("Событие с id = {0} не найдено", eventId));
         event.setViews(event.getViews() + 1);
@@ -46,7 +53,10 @@ public class PublicEventService {
                                          boolean onlyAvailable,
                                          Sort sort,
                                          int from,
-                                         int size) {
+                                         int size,
+                                         EndpointHit endpointHit) {
+        eventStatClient.sendHit(endpointHit);
+
         LocalDateTime start = toLocalDateTime(rangeStart);
         LocalDateTime end = toLocalDateTime(rangeEnd);
         List<Event> events = customEventRepository.findAllPublicEvents(text, categories, paid, start, end, sort, from, size);
