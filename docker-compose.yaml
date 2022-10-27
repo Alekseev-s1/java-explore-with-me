@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  main:
+    build: main-service/
+    container_name: main-service
+    ports:
+      - "8080:8080"
+    environment:
+      - HOST=stat-service
+      - PORT=9090
+      - DB_HOST=main-db
+      - DB_PORT=5432
+      - DB_NAME=explore_main_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    depends_on:
+      - stat
+      - main-db
+  stat:
+    build: stat-service/
+    container_name: stat-service
+    ports:
+      - "9090:9090"
+    environment:
+      - DB_HOST=stat-db
+      - DB_PORT=5432
+      - DB_NAME=explore_stat_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    depends_on:
+      - stat-db
+  main-db:
+    image: postgres:14
+    container_name: main-db
+    volumes:
+      - /var/lib/postgresql/data
+    ports:
+      - "5431:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=explore_main_db
+  stat-db:
+    image: postgres:14
+    container_name: stat-db
+    volumes:
+      - /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=explore_stat_db
