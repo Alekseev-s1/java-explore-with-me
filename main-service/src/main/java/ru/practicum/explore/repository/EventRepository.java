@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.explore.model.Category;
 import ru.practicum.explore.model.Event;
 import ru.practicum.explore.model.State;
-import ru.practicum.explore.model.User;
 
 import java.util.List;
 import java.util.Optional;

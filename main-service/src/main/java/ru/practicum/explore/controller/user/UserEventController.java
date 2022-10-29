@@ -32,9 +32,9 @@ public class UserEventController {
                                          @RequestParam(defaultValue = "0") int from,
                                          @RequestParam(defaultValue = "10") int size) {
         log.info("Get events by params: " +
-                "userId {}, " +
-                "from {}, " +
-                "size {}",
+                        "userId {}, " +
+                        "from {}, " +
+                        "size {}",
                 userId, from, size);
         return eventService.getEvents(userId, from, size);
     }

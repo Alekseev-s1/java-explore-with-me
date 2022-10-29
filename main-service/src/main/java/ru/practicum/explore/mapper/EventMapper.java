@@ -2,7 +2,10 @@ package ru.practicum.explore.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.explore.dto.*;
+import ru.practicum.explore.dto.AdminUpdateEventRequest;
+import ru.practicum.explore.dto.EventFullDto;
+import ru.practicum.explore.dto.EventShortDto;
+import ru.practicum.explore.dto.NewEventDto;
 import ru.practicum.explore.model.Category;
 import ru.practicum.explore.model.Event;
 

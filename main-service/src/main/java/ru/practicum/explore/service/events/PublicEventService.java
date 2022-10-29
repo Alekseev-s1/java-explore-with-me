@@ -40,7 +40,7 @@ public class PublicEventService {
         eventStatClient.sendHit(endpointHit);
 
         Event event = eventRepository.findEventByIdAndState(eventId, State.PUBLISHED)
-                        .orElseThrow(unitNotFoundException("Событие с id = {0} не найдено", eventId));
+                .orElseThrow(unitNotFoundException("Событие с id = {0} не найдено", eventId));
         event.setViews(event.getViews() + 1);
         return EventMapper.toEventFullDto(event);
     }

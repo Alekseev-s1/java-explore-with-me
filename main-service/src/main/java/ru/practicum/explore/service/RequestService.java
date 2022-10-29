@@ -69,7 +69,7 @@ public class RequestService {
         } else {
             request.setStatus(Status.PENDING);
         }
-        
+
         if (event.getParticipantLimit() != 0) {
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
         }

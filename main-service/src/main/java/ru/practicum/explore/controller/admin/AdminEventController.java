@@ -1,8 +1,5 @@
 package ru.practicum.explore.controller.admin;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +8,6 @@ import ru.practicum.explore.dto.EventFullDto;
 import ru.practicum.explore.model.State;
 import ru.practicum.explore.service.events.AdminEventService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j

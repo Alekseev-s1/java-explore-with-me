@@ -8,11 +8,11 @@ public class UnitNotFoundException extends RuntimeException {
         super(message);
     }
 
-    public UnitNotFoundException(String message, Object...args) {
+    public UnitNotFoundException(String message, Object... args) {
         super(MessageFormat.format(message, args));
     }
 
-    public static Supplier<UnitNotFoundException> unitNotFoundException(String message, Object...args) {
+    public static Supplier<UnitNotFoundException> unitNotFoundException(String message, Object... args) {
         return () -> new UnitNotFoundException(message, args);
     }
 }

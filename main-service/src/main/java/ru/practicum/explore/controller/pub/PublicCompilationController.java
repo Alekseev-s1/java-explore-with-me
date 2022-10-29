@@ -24,9 +24,9 @@ public class PublicCompilationController {
                                                 @RequestParam(defaultValue = "0") int from,
                                                 @RequestParam(defaultValue = "10") int size) {
         log.info("Get compilations by params: " +
-                "pinned {}, " +
-                "from {}, " +
-                "size {}",
+                        "pinned {}, " +
+                        "from {}, " +
+                        "size {}",
                 pinned, from, size);
         return compilationService.getCompilations(pinned, from, size);
     }

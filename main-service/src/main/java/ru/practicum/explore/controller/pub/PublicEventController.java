@@ -11,7 +11,6 @@ import ru.practicum.explore.model.Sort;
 import ru.practicum.explore.service.events.PublicEventService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
