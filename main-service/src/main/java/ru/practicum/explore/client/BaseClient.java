@@ -9,6 +9,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class BaseClient {
     protected final RestTemplate restTemplate;
@@ -30,7 +31,7 @@ public class BaseClient {
                                                           String path,
                                                           @Nullable Map<String, Object> parameters,
                                                           @Nullable T body) {
-        HttpEntity<T> requestEntity = new HttpEntity<>(body);
+        HttpEntity<T> requestEntity = new HttpEntity<>(Objects.requireNonNull(body));
         ResponseEntity<Object> serviceResponse;
         try {
             if (parameters != null) {
