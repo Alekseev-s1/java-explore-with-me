@@ -64,18 +64,6 @@ public class AdminEventService {
     @Transactional
     public EventFullDto updateEvent(long eventId, AdminUpdateEventRequest adminUpdateEventRequest) {
         Event eventToUpdate = getEventById(eventId);
-        Category category;
-
-        /*if (adminUpdateEventRequest.getCategory() != null) {
-            category = getCategoryById(adminUpdateEventRequest.getCategory());
-        } else {
-            category = null;
-        }*/
-
-        /*Event newEvent = EventMapper.toEvent(adminUpdateEventRequest, category);
-        newEvent.setId(eventToUpdate.getId());
-        saveLocation(newEvent.getLocation());
-        return EventMapper.toEventFullDto(eventRepository.save(newEvent));*/
 
         if (adminUpdateEventRequest.getTitle() != null) {
             eventToUpdate.setTitle(adminUpdateEventRequest.getTitle());
@@ -96,6 +84,7 @@ public class AdminEventService {
             eventToUpdate.setEventDate(adminUpdateEventRequest.getEventDate());
         }
         eventToUpdate.setParticipantLimit(adminUpdateEventRequest.getParticipantLimit());
+        eventToUpdate.setPaid(adminUpdateEventRequest.isPaid());
         return EventMapper.toEventFullDto(eventToUpdate);
     }
 
