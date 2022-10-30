@@ -1,12 +1,12 @@
 version: '3.8'
 services:
-  main:
+  ewm-service:
     build: main-service/
     container_name: main-service
     ports:
       - "8080:8080"
     environment:
-      - HOST=stat-service
+      - HOST=stats-server
       - PORT=9090
       - DB_HOST=main-db
       - DB_PORT=5432
@@ -14,9 +14,9 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
     depends_on:
-      - stat
-      - main-db
-  stat:
+      - stats-server
+      - ewm-db
+  stats-server:
     build: stat-service/
     container_name: stat-service
     ports:
@@ -28,9 +28,9 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
     depends_on:
-      - stat-db
-  main-db:
-    image: postgres:14
+      - stats-db
+  ewm-db:
+    image: postgres:14-alpine
     container_name: main-db
     volumes:
       - /var/lib/postgresql/data
@@ -39,8 +39,8 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=explore_main_db
-  stat-db:
-    image: postgres:14
+  stats-db:
+    image: postgres:14-alpine
     container_name: stat-db
     volumes:
       - /var/lib/postgresql/data
