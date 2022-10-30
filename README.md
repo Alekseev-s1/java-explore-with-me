@@ -35,8 +35,6 @@ API основного сервиса состоит из трех частей:
 ## Полная спецификация:
    * [Основной сервис](https://raw.githubusercontent.com/yandex-praktikum/java-explore-with-me/main/ewm-main-service-spec.json)
    * [Сервис статистики](https://raw.githubusercontent.com/yandex-praktikum/java-explore-with-me/main/ewm-stats-service-spec.json)
-## ER диаграмма:
-   
 ## Развертывание:
 Развертывание приложения осуществляется через docker-compose в 4 docker контейнерах:
    * Контейнер основного сервиса.
