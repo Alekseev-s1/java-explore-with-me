@@ -1,4 +1,6 @@
 # java-explore-with-me
+[Ссылка](https://github.com/Alekseev-s1/java-explore-with-me/pull/1) на pull request.
+
 Приложение Explore With Me представляет собой сервис, который позволяет находить интересные мероприятия вокруг себя, а также размещать свои.
 
 ## Описание:
