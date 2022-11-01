@@ -8,6 +8,8 @@ import ru.practicum.explore.dto.NewEventDto;
 import ru.practicum.explore.model.Category;
 import ru.practicum.explore.model.Event;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EventMapper {
     public static EventShortDto toEventShortDto(Event event) {
@@ -51,6 +53,7 @@ public class EventMapper {
                 .annotation(newEventDto.getAnnotation())
                 .description(newEventDto.getDescription())
                 .eventDate(newEventDto.getEventDate())
+                .createdOn(LocalDateTime.now())
                 .category(category)
                 .location(LocationMapper.toLocation(newEventDto.getLocation()))
                 .paid(newEventDto.isPaid())

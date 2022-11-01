@@ -20,7 +20,7 @@ public class Statistic {
     private String app;
     private String uri;
     private String ip;
-    private LocalDateTime timestamp = LocalDateTime.now();
+    private LocalDateTime timestamp;
 
     @Transient
     private long hits;

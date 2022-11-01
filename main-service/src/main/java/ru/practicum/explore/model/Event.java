@@ -34,7 +34,7 @@ public class Event {
     private Category category;
 
     @Column(name = "created_on")
-    private LocalDateTime createdOn = LocalDateTime.now();
+    private LocalDateTime createdOn;
 
     @Column(name = "published_on")
     private LocalDateTime publishedOn;

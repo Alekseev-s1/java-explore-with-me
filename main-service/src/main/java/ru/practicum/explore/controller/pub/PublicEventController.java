@@ -11,6 +11,7 @@ import ru.practicum.explore.model.Sort;
 import ru.practicum.explore.service.events.PublicEventService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -42,7 +43,10 @@ public class PublicEventController {
                         "from, {} " +
                         "size {}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
-        EndpointHit endpointHit = new EndpointHit(Constant.APP_NAME, request.getRequestURI(), request.getRemoteAddr());
+        EndpointHit endpointHit = new EndpointHit(Constant.APP_NAME,
+                request.getRequestURI(),
+                request.getRemoteAddr(),
+                LocalDateTime.now());
         return eventService.getEvents(text,
                 categories,
                 paid,
@@ -58,7 +62,10 @@ public class PublicEventController {
     @GetMapping("/{eventId}")
     public EventFullDto getEvent(@PathVariable long eventId, HttpServletRequest request) {
         log.info("Get event by eventId {}", eventId);
-        EndpointHit endpointHit = new EndpointHit(Constant.APP_NAME, request.getRequestURI(), request.getRemoteAddr());
+        EndpointHit endpointHit = new EndpointHit(Constant.APP_NAME,
+                request.getRequestURI(),
+                request.getRemoteAddr(),
+                LocalDateTime.now());
         return eventService.getEvent(eventId, endpointHit);
     }
 }
