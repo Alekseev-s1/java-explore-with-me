@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler
-    public ResponseEntity<ApiError> handleUnitNotFound(UnitNotFoundException e) {
+    public ResponseEntity<ApiError> handleNotFound(UnitNotFoundException e) {
         log.info("Ошибка {}: {}", e.getClass().getSimpleName(), e.getMessage());
         ApiError apiError = ApiError.builder()
                 .reason("The required object was not found.")
@@ -32,98 +32,16 @@ public class ErrorHandler {
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ApiError> handleInitiatorIsOwner(InitiatorIsOwnerException e) {
-        log.info("Ошибка {}: {}", e.getClass().getSimpleName(), e.getMessage());
-        ApiError apiError = ApiError.builder()
-                .reason("For the requested operation the conditions are not met.")
-                .message(e.getMessage())
-                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .timestamp(LocalDateTime.now())
-                .errors(Arrays.stream(e.getStackTrace())
-                        .map(StackTraceElement::getClassName)
-                        .collect(Collectors.toList()))
-                .build();
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ApiError> handleRequestAlreadyExists(RequestAlreadyExistsException e) {
-        log.info("Ошибка {}: {}", e.getClass().getSimpleName(), e.getMessage());
-        ApiError apiError = ApiError.builder()
-                .reason("For the requested operation the conditions are not met.")
-                .message(e.getMessage())
-                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .timestamp(LocalDateTime.now())
-                .errors(Arrays.stream(e.getStackTrace())
-                        .map(StackTraceElement::getClassName)
-                        .collect(Collectors.toList()))
-                .build();
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ApiError> handleRequestsLimit(RequestsLimitException e) {
-        log.info("Ошибка {}: {}", e.getClass().getSimpleName(), e.getMessage());
-        ApiError apiError = ApiError.builder()
-                .reason("For the requested operation the conditions are not met.")
-                .message(e.getMessage())
-                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .timestamp(LocalDateTime.now())
-                .errors(Arrays.stream(e.getStackTrace())
-                        .map(StackTraceElement::getClassName)
-                        .collect(Collectors.toList()))
-                .build();
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ApiError> handleUnavailableOperation(UnavailableOperationException e) {
-        log.info("Ошибка {}: {}", e.getClass().getSimpleName(), e.getMessage());
-        ApiError apiError = ApiError.builder()
-                .reason("For the requested operation the conditions are not met.")
-                .message(e.getMessage())
-                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .timestamp(LocalDateTime.now())
-                .errors(Arrays.stream(e.getStackTrace())
-                        .map(StackTraceElement::getClassName)
-                        .collect(Collectors.toList()))
-                .build();
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ApiError> handleWrongDate(WrongDateException e) {
-        log.info("Ошибка {}: {}", e.getClass().getSimpleName(), e.getMessage());
-        ApiError apiError = ApiError.builder()
-                .reason("For the requested operation the conditions are not met.")
-                .message(e.getMessage())
-                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .timestamp(LocalDateTime.now())
-                .errors(Arrays.stream(e.getStackTrace())
-                        .map(StackTraceElement::getClassName)
-                        .collect(Collectors.toList()))
-                .build();
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ApiError> handleWrongOwner(WrongOwnerException e) {
-        log.info("Ошибка {}: {}", e.getClass().getSimpleName(), e.getMessage());
-        ApiError apiError = ApiError.builder()
-                .reason("For the requested operation the conditions are not met.")
-                .message(e.getMessage())
-                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .timestamp(LocalDateTime.now())
-                .errors(Arrays.stream(e.getStackTrace())
-                        .map(StackTraceElement::getClassName)
-                        .collect(Collectors.toList()))
-                .build();
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ApiError> handleWrongState(WrongStateException e) {
+    @ExceptionHandler({
+            InitiatorIsOwnerException.class,
+            RequestAlreadyExistsException.class,
+            RequestsLimitException.class,
+            UnavailableOperationException.class,
+            WrongDateException.class,
+            WrongOwnerException.class,
+            WrongStateException.class
+    })
+    public ResponseEntity<ApiError> handleBadRequest(RuntimeException e) {
         log.info("Ошибка {}: {}", e.getClass().getSimpleName(), e.getMessage());
         ApiError apiError = ApiError.builder()
                 .reason("For the requested operation the conditions are not met.")
@@ -154,5 +72,20 @@ public class ErrorHandler {
             apiErrors.add(apiError);
         });
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ApiError> handleThrowable(Throwable e) {
+        log.error(String.format("Ошибка %s: %s", e.getClass().getSimpleName(), e.getMessage()));
+        ApiError apiError = ApiError.builder()
+                .reason("Error occurred")
+                .message(e.getMessage())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .timestamp(LocalDateTime.now())
+                .errors(Arrays.stream(e.getStackTrace())
+                        .map(StackTraceElement::getClassName)
+                        .collect(Collectors.toList()))
+                .build();
+        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
