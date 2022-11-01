@@ -1,7 +1,7 @@
 package ru.practicum.explore.controller.admin;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.dto.AdminUpdateEventRequest;
 import ru.practicum.explore.dto.EventFullDto;
@@ -11,15 +11,11 @@ import ru.practicum.explore.service.events.AdminEventService;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin/events")
 public class AdminEventController {
     private final AdminEventService eventService;
-
-    @Autowired
-    public AdminEventController(AdminEventService eventService) {
-        this.eventService = eventService;
-    }
 
     @GetMapping
     public List<EventFullDto> getEvents(@RequestParam List<Long> users,

@@ -1,6 +1,6 @@
 package ru.practicum.explore.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.explore.model.Event;
 import ru.practicum.explore.model.Sort;
@@ -16,13 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class CustomEventRepository {
     private final EntityManager entityManager;
-
-    @Autowired
-    public CustomEventRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public List<Event> findAllPublicEvents(String text,
                                            List<Long> categoryIds,

@@ -4,10 +4,6 @@ import java.text.MessageFormat;
 import java.util.function.Supplier;
 
 public class UnitNotFoundException extends RuntimeException {
-    public UnitNotFoundException(String message) {
-        super(message);
-    }
-
     public UnitNotFoundException(String message, Object... args) {
         super(MessageFormat.format(message, args));
     }

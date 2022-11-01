@@ -1,7 +1,7 @@
 package ru.practicum.explore.controller.pub;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.dto.EndpointHit;
 import ru.practicum.explore.dto.EventFullDto;
@@ -14,15 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/events")
 public class PublicEventController {
     private final PublicEventService eventService;
-
-    @Autowired
-    public PublicEventController(PublicEventService eventService) {
-        this.eventService = eventService;
-    }
 
     @GetMapping
     public List<EventShortDto> getEvents(@RequestParam(required = false) String text,

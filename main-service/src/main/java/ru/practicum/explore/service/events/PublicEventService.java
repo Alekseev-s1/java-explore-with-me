@@ -1,6 +1,6 @@
 package ru.practicum.explore.service.events;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.EndpointHit;
@@ -22,19 +22,11 @@ import static ru.practicum.explore.exception.UnitNotFoundException.unitNotFoundE
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class PublicEventService {
     private final EventRepository eventRepository;
     private final CustomEventRepository customEventRepository;
     private final EventStatClient eventStatClient;
-
-    @Autowired
-    public PublicEventService(EventRepository eventRepository,
-                              CustomEventRepository customEventRepository,
-                              EventStatClient eventStatClient) {
-        this.eventRepository = eventRepository;
-        this.customEventRepository = customEventRepository;
-        this.eventStatClient = eventStatClient;
-    }
 
     public EventFullDto getEvent(long eventId, EndpointHit endpointHit) {
         eventStatClient.sendHit(endpointHit);

@@ -2,7 +2,6 @@ package ru.practicum.explore.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.explore.dto.AdminUpdateEventRequest;
 import ru.practicum.explore.dto.EventFullDto;
 import ru.practicum.explore.dto.EventShortDto;
 import ru.practicum.explore.dto.NewEventDto;
@@ -46,39 +45,17 @@ public class EventMapper {
                 .build();
     }
 
-    public static Event toEvent(AdminUpdateEventRequest adminUpdateEventRequest, Category category) {
-        Event event = new Event();
-
-        event.setTitle(adminUpdateEventRequest.getTitle());
-        event.setAnnotation(adminUpdateEventRequest.getAnnotation());
-        event.setDescription(adminUpdateEventRequest.getDescription());
-        event.setEventDate(adminUpdateEventRequest.getEventDate());
-        event.setCategory(category);
-        event.setPaid(adminUpdateEventRequest.isPaid());
-        event.setRequestModeration(adminUpdateEventRequest.isRequestModeration());
-        event.setParticipantLimit(adminUpdateEventRequest.getParticipantLimit());
-
-        if (adminUpdateEventRequest.getLocation() != null) {
-            event.setLocation(LocationMapper.toLocation(adminUpdateEventRequest.getLocation()));
-        } else {
-            event.setLocation(null);
-        }
-
-        return event;
-    }
-
     public static Event toEvent(NewEventDto newEventDto, Category category) {
-        Event event = new Event();
-
-        event.setTitle(newEventDto.getTitle());
-        event.setAnnotation(newEventDto.getAnnotation());
-        event.setDescription(newEventDto.getDescription());
-        event.setEventDate(newEventDto.getEventDate());
-        event.setCategory(category);
-        event.setLocation(LocationMapper.toLocation(newEventDto.getLocation()));
-        event.setPaid(newEventDto.isPaid());
-        event.setRequestModeration(newEventDto.isRequestModeration());
-        event.setParticipantLimit(newEventDto.getParticipantLimit());
-        return event;
+        return Event.builder()
+                .title(newEventDto.getTitle())
+                .annotation(newEventDto.getAnnotation())
+                .description(newEventDto.getDescription())
+                .eventDate(newEventDto.getEventDate())
+                .category(category)
+                .location(LocationMapper.toLocation(newEventDto.getLocation()))
+                .paid(newEventDto.isPaid())
+                .requestModeration(newEventDto.isRequestModeration())
+                .participantLimit(newEventDto.getParticipantLimit())
+                .build();
     }
 }

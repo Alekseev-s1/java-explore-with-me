@@ -1,7 +1,7 @@
 package ru.practicum.explore.client;
 
 import io.micrometer.core.lang.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -9,13 +9,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public class BaseClient {
     protected final RestTemplate restTemplate;
-
-    @Autowired
-    public BaseClient(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     protected ResponseEntity<Object> get(String path, Map<String, Object> parameters) {
         return makeAndSendRequest(HttpMethod.GET, path, parameters, null);

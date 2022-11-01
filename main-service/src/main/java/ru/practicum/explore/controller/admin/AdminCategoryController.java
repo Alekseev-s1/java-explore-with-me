@@ -1,7 +1,7 @@
 package ru.practicum.explore.controller.admin;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.dto.CategoryDto;
 import ru.practicum.explore.dto.NewCategoryDto;
@@ -10,15 +10,11 @@ import ru.practicum.explore.service.CategoryService;
 import javax.validation.Valid;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin/categories")
 public class AdminCategoryController {
     private final CategoryService categoryService;
-
-    @Autowired
-    public AdminCategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
 
     @PostMapping
     public CategoryDto createCategory(@RequestBody @Valid NewCategoryDto newCategoryDto) {

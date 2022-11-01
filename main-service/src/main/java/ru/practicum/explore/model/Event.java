@@ -1,7 +1,6 @@
 package ru.practicum.explore.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +8,9 @@ import java.util.List;
 
 @Setter
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "events")
 public class Event {

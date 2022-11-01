@@ -12,9 +12,9 @@ public class LocationMapper {
     }
 
     public static Location toLocation(LocationDto locationDto) {
-        Location location = new Location();
-        location.setLat(locationDto.getLat());
-        location.setLon(locationDto.getLon());
-        return location;
+        return Location.builder()
+                .lat(locationDto.getLat())
+                .lon(locationDto.getLon())
+                .build();
     }
 }

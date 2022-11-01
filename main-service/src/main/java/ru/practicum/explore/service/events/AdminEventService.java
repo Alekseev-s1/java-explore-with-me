@@ -1,6 +1,6 @@
 package ru.practicum.explore.service.events;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.AdminUpdateEventRequest;
@@ -28,22 +28,12 @@ import static ru.practicum.explore.exception.UnitNotFoundException.unitNotFoundE
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class AdminEventService {
     private final CustomEventRepository customEventRepository;
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final LocationRepository locationRepository;
-
-    @Autowired
-    public AdminEventService(CustomEventRepository customEventRepository,
-                             EventRepository eventRepository,
-                             CategoryRepository categoryRepository,
-                             LocationRepository locationRepository) {
-        this.customEventRepository = customEventRepository;
-        this.eventRepository = eventRepository;
-        this.categoryRepository = categoryRepository;
-        this.locationRepository = locationRepository;
-    }
 
     public List<EventFullDto> getEvents(List<Long> userIds,
                                         List<State> states,

@@ -1,7 +1,7 @@
 package ru.practicum.explore.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.dto.EndpointHit;
 import ru.practicum.explore.dto.ViewStatsDto;
@@ -10,14 +10,10 @@ import ru.practicum.explore.service.StatService;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 public class StatController {
     private final StatService statService;
-
-    @Autowired
-    public StatController(StatService statService) {
-        this.statService = statService;
-    }
 
     @GetMapping("/stats")
     public List<ViewStatsDto> getStatistics(@RequestParam String start,

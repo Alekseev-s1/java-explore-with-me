@@ -1,6 +1,6 @@
 package ru.practicum.explore.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.EndpointHit;
@@ -18,13 +18,9 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class StatService {
     private final StatRepository statRepository;
-
-    @Autowired
-    public StatService(StatRepository statRepository) {
-        this.statRepository = statRepository;
-    }
 
     @Transactional
     public void createHit(EndpointHit endpointHit) {

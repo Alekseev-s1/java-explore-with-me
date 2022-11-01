@@ -1,6 +1,6 @@
 package ru.practicum.explore.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.ParticipationRequestDto;
@@ -21,19 +21,11 @@ import static ru.practicum.explore.exception.UnitNotFoundException.unitNotFoundE
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class RequestService {
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
-
-    @Autowired
-    public RequestService(RequestRepository requestRepository,
-                          UserRepository userRepository,
-                          EventRepository eventRepository) {
-        this.requestRepository = requestRepository;
-        this.userRepository = userRepository;
-        this.eventRepository = eventRepository;
-    }
 
     public List<ParticipationRequestDto> getRequests(long userId) {
         return requestRepository.findRequestsByRequesterId(userId).stream()

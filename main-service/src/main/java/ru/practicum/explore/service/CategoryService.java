@@ -1,6 +1,6 @@
 package ru.practicum.explore.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,16 +20,10 @@ import static ru.practicum.explore.exception.UnitNotFoundException.unitNotFoundE
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
-
-    @Autowired
-    public CategoryService(CategoryRepository categoryRepository,
-                           EventRepository eventRepository) {
-        this.categoryRepository = categoryRepository;
-        this.eventRepository = eventRepository;
-    }
 
     public CategoryDto getCategory(long categoryId) {
         return CategoryMapper.toCategoryDto(getCategoryById(categoryId));

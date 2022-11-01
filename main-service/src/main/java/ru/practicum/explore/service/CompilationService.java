@@ -1,6 +1,6 @@
 package ru.practicum.explore.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,16 +19,10 @@ import static ru.practicum.explore.exception.UnitNotFoundException.unitNotFoundE
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class CompilationService {
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
-
-    @Autowired
-    public CompilationService(CompilationRepository compilationRepository,
-                              EventRepository eventRepository) {
-        this.compilationRepository = compilationRepository;
-        this.eventRepository = eventRepository;
-    }
 
     public CompilationDto getCompilation(long compId) {
         return CompilationMapper.toCompilationDto(getCompilationById(compId));

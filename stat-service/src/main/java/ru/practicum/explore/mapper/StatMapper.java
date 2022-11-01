@@ -10,12 +10,11 @@ import ru.practicum.explore.model.ViewStats;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StatMapper {
     public static Statistic toStatistic(EndpointHit endpointHit) {
-        Statistic statistic = new Statistic();
-
-        statistic.setApp(endpointHit.getApp());
-        statistic.setUri(endpointHit.getUri());
-        statistic.setIp(endpointHit.getIp());
-        return statistic;
+        return Statistic.builder()
+                .app(endpointHit.getApp())
+                .uri(endpointHit.getUri())
+                .ip(endpointHit.getIp())
+                .build();
     }
 
     public static ViewStatsDto toViewStats(ViewStats viewStats) {

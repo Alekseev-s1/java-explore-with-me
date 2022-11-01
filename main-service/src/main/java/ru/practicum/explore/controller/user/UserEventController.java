@@ -1,7 +1,7 @@
 package ru.practicum.explore.controller.user;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.dto.*;
 import ru.practicum.explore.service.events.UserEventService;
@@ -10,15 +10,11 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("users/{userId}/events")
 public class UserEventController {
     private final UserEventService eventService;
-
-    @Autowired
-    public UserEventController(UserEventService eventService) {
-        this.eventService = eventService;
-    }
 
     @GetMapping("/{eventId}")
     public EventFullDto getEvent(@PathVariable long userId,

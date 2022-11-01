@@ -1,6 +1,6 @@
 package ru.practicum.explore.service.events;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,25 +22,13 @@ import static ru.practicum.explore.exception.UnitNotFoundException.unitNotFoundE
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserEventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final RequestRepository requestRepository;
     private final LocationRepository locationRepository;
-
-    @Autowired
-    public UserEventService(EventRepository eventRepository,
-                            CategoryRepository categoryRepository,
-                            UserRepository userRepository,
-                            RequestRepository requestRepository,
-                            LocationRepository locationRepository) {
-        this.eventRepository = eventRepository;
-        this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
-        this.requestRepository = requestRepository;
-        this.locationRepository = locationRepository;
-    }
 
     public EventFullDto getEvent(long userId, long eventId) {
         return EventMapper.toEventFullDto(getEventByEventAndUserIds(userId, eventId));

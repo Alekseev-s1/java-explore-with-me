@@ -1,7 +1,7 @@
 package ru.practicum.explore.controller.user;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.dto.ParticipationRequestDto;
 import ru.practicum.explore.service.RequestService;
@@ -9,15 +9,11 @@ import ru.practicum.explore.service.RequestService;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users/{userId}/requests")
 public class RequestController {
     private final RequestService requestService;
-
-    @Autowired
-    public RequestController(RequestService requestService) {
-        this.requestService = requestService;
-    }
 
     @GetMapping
     public List<ParticipationRequestDto> getRequests(@PathVariable long userId) {
