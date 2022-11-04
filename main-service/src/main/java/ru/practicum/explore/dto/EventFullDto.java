@@ -6,7 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.explore.model.State;
+import ru.practicum.explore.model.EventState;
 
 import java.time.LocalDateTime;
 
@@ -37,6 +37,6 @@ public class EventFullDto {
     private Boolean paid;
     private Long participantLimit;
     private Boolean requestModeration;
-    private State state;
+    private EventState state;
     private Long views;
 }

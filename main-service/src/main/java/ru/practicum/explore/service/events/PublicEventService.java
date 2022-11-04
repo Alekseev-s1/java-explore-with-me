@@ -9,7 +9,7 @@ import ru.practicum.explore.dto.EventShortDto;
 import ru.practicum.explore.mapper.EventMapper;
 import ru.practicum.explore.model.Event;
 import ru.practicum.explore.model.Sort;
-import ru.practicum.explore.model.State;
+import ru.practicum.explore.model.EventState;
 import ru.practicum.explore.repository.CustomEventRepository;
 import ru.practicum.explore.repository.EventRepository;
 
@@ -31,7 +31,7 @@ public class PublicEventService {
     public EventFullDto getEvent(long eventId, EndpointHit endpointHit) {
         eventStatClient.sendHit(endpointHit);
 
-        Event event = eventRepository.findEventByIdAndState(eventId, State.PUBLISHED)
+        Event event = eventRepository.findEventByIdAndState(eventId, EventState.PUBLISHED)
                 .orElseThrow(unitNotFoundException("Событие с id = {0} не найдено", eventId));
         event.setViews(event.getViews() + 1);
         return EventMapper.toEventFullDto(event);

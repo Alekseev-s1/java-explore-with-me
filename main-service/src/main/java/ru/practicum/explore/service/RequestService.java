@@ -45,7 +45,7 @@ public class RequestService {
         if (event.getInitiator().getId() == userId) {
             throw new InitiatorIsOwnerException("Инициатор события не может добавить запрос на участие в своём событии");
         }
-        if (!event.getState().equals(State.PUBLISHED)) {
+        if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new WrongStateException("Нельзя участвовать в неопубликованном событии");
         }
         if (event.getParticipantLimit() == event.getConfirmedRequests()) {
@@ -57,9 +57,9 @@ public class RequestService {
         request.setRequester(user);
 
         if (!event.isRequestModeration() || event.getParticipantLimit() == 0) {
-            request.setStatus(Status.CONFIRMED);
+            request.setStatus(RequestStatus.CONFIRMED);
         } else {
-            request.setStatus(Status.PENDING);
+            request.setStatus(RequestStatus.PENDING);
         }
 
         if (event.getParticipantLimit() != 0) {
@@ -75,7 +75,7 @@ public class RequestService {
                 .orElseThrow(unitNotFoundException("Заявка с id={0}, принадлежащая пользователю с id={1}, не найдена",
                         reqId,
                         userId));
-        request.setStatus(Status.CANCELED);
+        request.setStatus(RequestStatus.CANCELED);
         return RequestMapper.toParticipationRequestDto(request);
     }
 
