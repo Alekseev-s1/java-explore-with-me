@@ -39,7 +39,8 @@ public class ErrorHandler {
             UnavailableOperationException.class,
             WrongDateException.class,
             WrongOwnerException.class,
-            WrongStateException.class
+            WrongStateException.class,
+            UserIsNotParticipantException.class
     })
     public ResponseEntity<ApiError> handleBadRequest(RuntimeException e) {
         log.info("Ошибка {}: {}", e.getClass().getSimpleName(), e.getMessage());
