@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    public List<Comment> findAllByState(CommentState state);
+    List<Comment> findAllByEventId(long eventId);
+
+    List<Comment> findAllByEventIdAndState(long eventId, CommentState state);
 }
 

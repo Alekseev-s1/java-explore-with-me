@@ -22,7 +22,7 @@ public class Comment {
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "event_id", referencedColumnName = "name_id")
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id")
     private Event event;
 
     @ManyToOne
@@ -31,5 +31,7 @@ public class Comment {
 
     @Enumerated(EnumType.STRING)
     private CommentState state;
-    private LocalDateTime createdAd;
+
+    @Column(name = "created_on")
+    private LocalDateTime createdOn;
 }

@@ -31,12 +31,13 @@ public class CommentService {
     private final RequestRepository requestRepository;
 
     public List<CommentResponseDto> getComments(long eventId, boolean isPublished) {
+        Event event = getEventById(eventId);
         List<Comment> comments;
 
         if (isPublished) {
-            comments = commentRepository.findAllByState(CommentState.PUBLISHED);
+            comments = commentRepository.findAllByEventIdAndState(eventId, CommentState.PUBLISHED);
         } else {
-            comments = commentRepository.findAll();
+            comments = commentRepository.findAllByEventId(eventId);
         }
 
         return comments.stream()
@@ -54,7 +55,7 @@ public class CommentService {
         }
         if (event.isRequestModeration()) {
             Optional<Request> request = requestRepository.findRequestByRequesterAndEvent(author, event);
-            if (request.isPresent() && request.get().getStatus().equals(RequestStatus.CONFIRMED)) {
+            if (!(request.isPresent() && request.get().getStatus().equals(RequestStatus.CONFIRMED))) {
                 throw new UserIsNotParticipantException("Добавить комментарий может только пользователь с " +
                         "подтвержденным запросом на участие");
             }
@@ -82,7 +83,7 @@ public class CommentService {
         }
         if (event.isRequestModeration()) {
             Optional<Request> request = requestRepository.findRequestByRequesterAndEvent(author, event);
-            if (request.isPresent() && request.get().getStatus().equals(RequestStatus.CONFIRMED)) {
+            if (!(request.isPresent() && request.get().getStatus().equals(RequestStatus.CONFIRMED))) {
                 throw new UserIsNotParticipantException("Добавить комментарий может только пользователь с " +
                         "подтвержденным запросом на участие");
             }
@@ -122,7 +123,7 @@ public class CommentService {
             );
         }
 
-        commentRepository.delete(comment);
+        comment.setState(CommentState.DELETED);
     }
 
     @Transactional
@@ -135,7 +136,7 @@ public class CommentService {
             );
         }
 
-        commentRepository.delete(comment);
+        comment.setState(CommentState.DELETED);
     }
 
     private User getUserById(long userId) {

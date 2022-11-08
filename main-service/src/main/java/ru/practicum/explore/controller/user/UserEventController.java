@@ -75,8 +75,8 @@ public class UserEventController {
 
     @PatchMapping("/{eventId}/requests/{reqId}/reject")
     public ParticipationRequestDto rejectRequest(@PathVariable long userId,
-                                                  @PathVariable long eventId,
-                                                  @PathVariable long reqId) {
+                                                 @PathVariable long eventId,
+                                                 @PathVariable long reqId) {
         log.info("Rejecting request by userId {}, eventId {}, reqId {}", userId, eventId, reqId);
         return eventService.rejectRequest(userId, eventId, reqId);
     }

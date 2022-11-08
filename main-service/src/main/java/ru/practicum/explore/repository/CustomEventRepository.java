@@ -3,8 +3,8 @@ package ru.practicum.explore.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.explore.model.Event;
-import ru.practicum.explore.model.Sort;
 import ru.practicum.explore.model.EventState;
+import ru.practicum.explore.model.Sort;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;

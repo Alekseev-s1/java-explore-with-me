@@ -15,6 +15,6 @@ public class CommentResponseDto {
     private String text;
     private long eventId;
     private UserDto author;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdOn;
     private CommentState state;
 }
