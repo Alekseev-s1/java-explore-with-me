@@ -22,11 +22,11 @@ public class AdminEventController {
     private final CommentService commentService;
 
     @GetMapping
-    public List<EventFullDto> getEvents(@RequestParam List<Long> users,
-                                        @RequestParam List<EventState> states,
-                                        @RequestParam List<Long> categories,
-                                        @RequestParam String rangeStart,
-                                        @RequestParam String rangeEnd,
+    public List<EventFullDto> getEvents(@RequestParam(required = false) List<Long> users,
+                                        @RequestParam(required = false) List<EventState> states,
+                                        @RequestParam(required = false) List<Long> categories,
+                                        @RequestParam(required = false) String rangeStart,
+                                        @RequestParam(required = false) String rangeEnd,
                                         @RequestParam(defaultValue = "0") int from,
                                         @RequestParam(defaultValue = "10") int size) {
         log.info("Get event by params: " +

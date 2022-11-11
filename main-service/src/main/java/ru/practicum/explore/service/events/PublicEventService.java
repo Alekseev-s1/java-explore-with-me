@@ -66,6 +66,10 @@ public class PublicEventService {
     }
 
     private LocalDateTime toLocalDateTime(String date) {
+        if (date == null) {
+            return null;
+        }
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return LocalDateTime.parse(date, formatter);
     }
