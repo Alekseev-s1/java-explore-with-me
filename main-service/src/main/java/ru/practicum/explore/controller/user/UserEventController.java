@@ -84,16 +84,16 @@ public class UserEventController {
     @PostMapping("/{eventId}/comments")
     public CommentResponseDto addComment(@PathVariable long userId,
                                          @PathVariable long eventId,
-                                         @RequestBody CommentRequestDto commentRequestDto) {
+                                         @RequestBody @Valid CommentRequestDto commentRequestDto) {
         log.info("Creating comment userId {}, eventId {}, comment {}", userId, eventId, commentRequestDto);
         return commentService.addComment(userId, eventId, commentRequestDto);
     }
 
-    @PutMapping("{eventId}/comments/{commentId}")
+    @PutMapping("/{eventId}/comments/{commentId}")
     public CommentResponseDto updateComment(@PathVariable long userId,
                                             @PathVariable long eventId,
                                             @PathVariable long commentId,
-                                            @RequestBody CommentRequestDto commentRequestDto) {
+                                            @RequestBody @Valid CommentRequestDto commentRequestDto) {
         log.info("Updating comment userId {}, eventId {}, commentId {}, comment {}",
                 userId,
                 eventId,
@@ -102,11 +102,10 @@ public class UserEventController {
         return commentService.updateCommentByUser(userId, eventId, commentId, commentRequestDto);
     }
 
-    @DeleteMapping("/{eventId}/comments/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     public void deleteComment(@PathVariable long userId,
-                              @PathVariable long eventId,
                               @PathVariable long commentId) {
-        log.info("Deleting comment userId {}, eventId {}, commentId {}", userId, eventId, commentId);
-        commentService.deleteCommentByUser(userId, eventId, commentId);
+        log.info("Deleting comment userId {}, commentId {}", userId, commentId);
+        commentService.deleteCommentByUser(userId, commentId);
     }
 }

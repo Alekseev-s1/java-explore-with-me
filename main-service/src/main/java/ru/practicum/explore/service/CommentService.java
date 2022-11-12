@@ -109,7 +109,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteCommentByUser(long userId, long eventId, long commentId) {
+    public void deleteCommentByUser(long userId, long commentId) {
         Comment comment = getCommentById(commentId);
 
         if (comment.getAuthor().getId() != userId) {
@@ -117,25 +117,13 @@ public class CommentService {
                     String.format("Пользователь с id=%d не является автором комментария с id=%d", userId, commentId)
             );
         }
-        if (comment.getEvent().getId() != eventId) {
-            throw new WrongOwnerException(
-                    String.format("Комментарий с id=%d не относится к событию с id=%d", commentId, eventId)
-            );
-        }
 
         comment.setState(CommentState.DELETED);
     }
 
     @Transactional
-    public void deleteCommentByAdmin(long eventId, long commentId) {
+    public void deleteCommentByAdmin(long commentId) {
         Comment comment = getCommentById(commentId);
-
-        if (comment.getEvent().getId() != eventId) {
-            throw new WrongOwnerException(
-                    String.format("Комментарий с id=%d не относится к событию с id=%d", commentId, eventId)
-            );
-        }
-
         comment.setState(CommentState.DELETED);
     }
 

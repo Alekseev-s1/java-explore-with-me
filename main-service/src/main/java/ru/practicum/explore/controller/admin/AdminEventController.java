@@ -11,6 +11,7 @@ import ru.practicum.explore.model.EventState;
 import ru.practicum.explore.service.CommentService;
 import ru.practicum.explore.service.events.AdminEventService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -44,19 +45,19 @@ public class AdminEventController {
     @PutMapping("/{eventId}")
     public EventFullDto updateEvent(@PathVariable long eventId,
                                     @RequestBody AdminUpdateEventRequest adminUpdateEventRequest) {
-        log.info("Updating event with id {}, updateEvent {}", eventId, adminUpdateEventRequest);
+        log.info("Updating event by admin eventId {}, updateEvent {}", eventId, adminUpdateEventRequest);
         return eventService.updateEvent(eventId, adminUpdateEventRequest);
     }
 
     @PatchMapping("/{eventId}/publish")
     public EventFullDto publishEvent(@PathVariable long eventId) {
-        log.info("Publishing event with id {}", eventId);
+        log.info("Publishing event by admin eventId {}", eventId);
         return eventService.publishEvent(eventId);
     }
 
     @PatchMapping("/{eventId}/reject")
     public EventFullDto rejectEvent(@PathVariable long eventId) {
-        log.info("Rejecting event with id {}", eventId);
+        log.info("Rejecting event by admin eventId {}", eventId);
         return eventService.rejectEvent(eventId);
     }
 
@@ -69,15 +70,14 @@ public class AdminEventController {
     @PutMapping("/{eventId}/comments/{commentId}")
     public CommentResponseDto updateComment(@PathVariable long eventId,
                                             @PathVariable long commentId,
-                                            @RequestBody CommentRequestDto commentRequestDto) {
+                                            @RequestBody @Valid CommentRequestDto commentRequestDto) {
         log.info("Updating comment by admin eventId {}, commentId {}, comment {}", eventId, commentId, commentRequestDto);
         return commentService.updateCommentByAdmin(eventId, commentId, commentRequestDto);
     }
 
-    @DeleteMapping("/{eventId}/comments/{commentId}")
-    public void deleteComment(@PathVariable long eventId,
-                              @PathVariable long commentId) {
-        log.info("Deleting comment by admin eventId {}, commentId {}", eventId, commentId);
-        commentService.deleteCommentByAdmin(eventId, commentId);
+    @DeleteMapping("/comments/{commentId}")
+    public void deleteComment(@PathVariable long commentId) {
+        log.info("Deleting comment by admin commentId {}", commentId);
+        commentService.deleteCommentByAdmin(commentId);
     }
 }
