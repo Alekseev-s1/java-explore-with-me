@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.explore.dto.CommentRequestDto;
 import ru.practicum.explore.dto.CommentResponseDto;
+import ru.practicum.explore.dto.UserDto;
 import ru.practicum.explore.model.Comment;
 import ru.practicum.explore.model.CommentState;
 import ru.practicum.explore.model.Event;
@@ -28,7 +29,9 @@ public class CommentMapper {
                 .id(comment.getId())
                 .text(comment.getText())
                 .eventId(comment.getEvent().getId())
-                .author(UserMapper.toUserDto(comment.getAuthor()))
+                .author(comment.getAuthor() == null ?
+                        UserDto.builder().name("Anonymous").build() :
+                        UserMapper.toUserDto(comment.getAuthor()))
                 .state(comment.getState())
                 .createdOn(comment.getCreatedOn())
                 .build();
