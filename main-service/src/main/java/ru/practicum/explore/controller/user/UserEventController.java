@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.dto.*;
+import ru.practicum.explore.service.CommentService;
 import ru.practicum.explore.service.events.UserEventService;
 
 import javax.validation.Valid;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("users/{userId}/events")
 public class UserEventController {
     private final UserEventService eventService;
+    private final CommentService commentService;
 
     @GetMapping("/{eventId}")
     public EventFullDto getEvent(@PathVariable long userId,
@@ -72,10 +74,38 @@ public class UserEventController {
     }
 
     @PatchMapping("/{eventId}/requests/{reqId}/reject")
-    private ParticipationRequestDto rejectRequest(@PathVariable long userId,
-                                                  @PathVariable long eventId,
-                                                  @PathVariable long reqId) {
+    public ParticipationRequestDto rejectRequest(@PathVariable long userId,
+                                                 @PathVariable long eventId,
+                                                 @PathVariable long reqId) {
         log.info("Rejecting request by userId {}, eventId {}, reqId {}", userId, eventId, reqId);
         return eventService.rejectRequest(userId, eventId, reqId);
+    }
+
+    @PostMapping("/{eventId}/comments")
+    public CommentResponseDto addComment(@PathVariable long userId,
+                                         @PathVariable long eventId,
+                                         @RequestBody @Valid CommentRequestDto commentRequestDto) {
+        log.info("Creating comment userId {}, eventId {}, comment {}", userId, eventId, commentRequestDto);
+        return commentService.addComment(userId, eventId, commentRequestDto);
+    }
+
+    @PutMapping("/{eventId}/comments/{commentId}")
+    public CommentResponseDto updateComment(@PathVariable long userId,
+                                            @PathVariable long eventId,
+                                            @PathVariable long commentId,
+                                            @RequestBody @Valid CommentRequestDto commentRequestDto) {
+        log.info("Updating comment userId {}, eventId {}, commentId {}, comment {}",
+                userId,
+                eventId,
+                commentId,
+                commentRequestDto);
+        return commentService.updateCommentByUser(userId, eventId, commentId, commentRequestDto);
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public void deleteComment(@PathVariable long userId,
+                              @PathVariable long commentId) {
+        log.info("Deleting comment userId {}, commentId {}", userId, commentId);
+        commentService.deleteCommentByUser(userId, commentId);
     }
 }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.explore.model.Status;
+import ru.practicum.explore.model.RequestStatus;
 
 import java.time.LocalDateTime;
 
@@ -21,5 +21,5 @@ public class ParticipationRequestDto {
     private LocalDateTime created;
     private Long event;
     private Long requester;
-    private Status status;
+    private RequestStatus status;
 }

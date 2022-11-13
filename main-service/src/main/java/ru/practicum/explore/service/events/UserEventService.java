@@ -58,7 +58,7 @@ public class UserEventService {
 
         User user = getUserById(userId);
         event.setInitiator(user);
-        event.setState(State.PENDING);
+        event.setState(EventState.PENDING);
         saveLocation(event.getLocation());
         return EventMapper.toEventFullDto(eventRepository.save(event));
     }
@@ -67,7 +67,7 @@ public class UserEventService {
     public EventFullDto updateEvent(long userId, UpdateEventRequest updateEventRequest) {
         Event eventToUpdate = getEventByEventAndUserIds(userId, updateEventRequest.getEventId());
 
-        if (eventToUpdate.getState().equals(State.PUBLISHED)) {
+        if (eventToUpdate.getState().equals(EventState.PUBLISHED)) {
             throw new WrongStateException("Изменить можно только отмененные события или события в состоянии ожидания модерации");
         }
         if (!LocalDateTime.now().isBefore(eventToUpdate.getEventDate().minusHours(2))) {
@@ -79,8 +79,8 @@ public class UserEventService {
             }
         }
 
-        if (eventToUpdate.getState().equals(State.CANCELED)) {
-            eventToUpdate.setState(State.PENDING);
+        if (eventToUpdate.getState().equals(EventState.CANCELED)) {
+            eventToUpdate.setState(EventState.PENDING);
         }
         if (updateEventRequest.getTitle() != null) {
             eventToUpdate.setTitle(updateEventRequest.getTitle());
@@ -114,11 +114,11 @@ public class UserEventService {
     public EventFullDto cancelEvent(long userId, long eventId) {
         Event event = getEventByEventAndUserIds(userId, eventId);
 
-        if (!event.getState().equals(State.PENDING)) {
+        if (!event.getState().equals(EventState.PENDING)) {
             throw new WrongStateException("Отменить можно только событие в состоянии ожидания модерации");
         }
 
-        event.setState(State.CANCELED);
+        event.setState(EventState.CANCELED);
         return EventMapper.toEventFullDto(event);
     }
 
@@ -134,13 +134,13 @@ public class UserEventService {
             throw new RequestsLimitException("Нельзя подтвердить заявку. Лимит подтвержденных заявок уже исчерпан");
         }
         if (event.getParticipantLimit() == (event.getConfirmedRequests() + 1)) {
-            List<Request> pendingRequests = requestRepository.findRequestsByEventAndStatus(event, Status.PENDING);
+            List<Request> pendingRequests = requestRepository.findRequestsByEventAndStatus(event, RequestStatus.PENDING);
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-            request.setStatus(Status.CONFIRMED);
-            pendingRequests.forEach(req -> req.setStatus(Status.CANCELED));
+            request.setStatus(RequestStatus.CONFIRMED);
+            pendingRequests.forEach(req -> req.setStatus(RequestStatus.CANCELED));
         } else {
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-            request.setStatus(Status.CONFIRMED);
+            request.setStatus(RequestStatus.CONFIRMED);
         }
 
         return RequestMapper.toParticipationRequestDto(request);
@@ -150,7 +150,7 @@ public class UserEventService {
     public ParticipationRequestDto rejectRequest(long userId, long eventId, long reqId) {
         Event event = getEventByEventAndUserIds(userId, eventId);
         Request request = getRequestById(reqId);
-        request.setStatus(Status.REJECTED);
+        request.setStatus(RequestStatus.REJECTED);
         return RequestMapper.toParticipationRequestDto(request);
     }
 

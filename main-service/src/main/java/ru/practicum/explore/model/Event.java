@@ -23,7 +23,7 @@ public class Event {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private State state;
+    private EventState state;
 
     @ManyToOne
     @JoinColumn(name = "initiator_id", referencedColumnName = "user_id")

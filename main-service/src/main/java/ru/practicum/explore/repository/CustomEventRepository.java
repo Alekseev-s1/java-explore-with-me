@@ -3,8 +3,8 @@ package ru.practicum.explore.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.explore.model.Event;
+import ru.practicum.explore.model.EventState;
 import ru.practicum.explore.model.Sort;
-import ru.practicum.explore.model.State;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -33,7 +33,7 @@ public class CustomEventRepository {
         Root<Event> event = query.from(Event.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        predicates.add(cb.equal(event.get("state"), State.PUBLISHED));
+        predicates.add(cb.equal(event.get("state"), EventState.PUBLISHED));
 
         if (text != null) {
             predicates.add(cb.or(
@@ -70,7 +70,7 @@ public class CustomEventRepository {
     }
 
     public List<Event> findAllAdminEvents(List<Long> userIds,
-                                          List<State> states,
+                                          List<EventState> states,
                                           List<Long> categories,
                                           LocalDateTime rangeStart,
                                           LocalDateTime rangeEnd,

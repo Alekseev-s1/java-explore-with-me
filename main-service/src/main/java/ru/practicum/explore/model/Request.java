@@ -25,6 +25,6 @@ public class Request {
     private User requester;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private RequestStatus status;
     private LocalDateTime created = LocalDateTime.now();
 }

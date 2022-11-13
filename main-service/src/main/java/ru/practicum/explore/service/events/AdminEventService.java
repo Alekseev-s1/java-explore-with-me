@@ -11,8 +11,8 @@ import ru.practicum.explore.mapper.EventMapper;
 import ru.practicum.explore.mapper.LocationMapper;
 import ru.practicum.explore.model.Category;
 import ru.practicum.explore.model.Event;
+import ru.practicum.explore.model.EventState;
 import ru.practicum.explore.model.Location;
-import ru.practicum.explore.model.State;
 import ru.practicum.explore.repository.CategoryRepository;
 import ru.practicum.explore.repository.CustomEventRepository;
 import ru.practicum.explore.repository.EventRepository;
@@ -36,7 +36,7 @@ public class AdminEventService {
     private final LocationRepository locationRepository;
 
     public List<EventFullDto> getEvents(List<Long> userIds,
-                                        List<State> states,
+                                        List<EventState> states,
                                         List<Long> categories,
                                         String rangeStart,
                                         String rangeEnd,
@@ -85,14 +85,14 @@ public class AdminEventService {
         if (!LocalDateTime.now().isBefore(event.getEventDate().minusHours(1))) {
             throw new WrongDateException("Дата начала события должна быть не ранее чем за час от даты публикации");
         }
-        if (!event.getState().equals(State.PENDING)) {
+        if (!event.getState().equals(EventState.PENDING)) {
             throw new WrongStateException(
                     String.format("Событие должно быть в состоянии ожидания публикации (%s). " +
-                            "Текущее состояние события - %s", State.PENDING, event.getState())
+                            "Текущее состояние события - %s", EventState.PENDING, event.getState())
             );
         }
 
-        event.setState(State.PUBLISHED);
+        event.setState(EventState.PUBLISHED);
         event.setPublishedOn(LocalDateTime.now());
         return EventMapper.toEventFullDto(event);
     }
@@ -101,11 +101,11 @@ public class AdminEventService {
     public EventFullDto rejectEvent(long eventId) {
         Event event = getEventById(eventId);
 
-        if (event.getState().equals(State.PUBLISHED)) {
+        if (event.getState().equals(EventState.PUBLISHED)) {
             throw new WrongStateException("Событие не должно быть опубликовано");
         }
 
-        event.setState(State.CANCELED);
+        event.setState(EventState.CANCELED);
         return EventMapper.toEventFullDto(event);
     }
 
@@ -132,6 +132,9 @@ public class AdminEventService {
     }
 
     private LocalDateTime toLocalDateTime(String date) {
+        if (date == null) {
+            return null;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return LocalDateTime.parse(date, formatter);
     }
